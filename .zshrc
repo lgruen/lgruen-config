@@ -41,7 +41,8 @@ ZSH_THEME="powerlevel10k/powerlevel10k"
 # export UPDATE_ZSH_DAYS=13
 
 # Uncomment the following line if pasting URLs and other text is messed up.
-# DISABLE_MAGIC_FUNCTIONS="true"
+# Uncommenting also speeds up pasting with autosuggest enabled.
+DISABLE_MAGIC_FUNCTIONS="true"
 
 # Uncomment the following line to disable colors in ls.
 # DISABLE_LS_COLORS="true"
@@ -78,7 +79,7 @@ ZSH_THEME="powerlevel10k/powerlevel10k"
 # Custom plugins may be added to $ZSH_CUSTOM/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git zsh-autosuggestions zsh-history-substring-search zsh-syntax-highlighting)
+plugins=(git docker zsh-autosuggestions history-substring-search zsh-syntax-highlighting)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -131,19 +132,6 @@ export DOCKER_BUILDKIT=1
 
 # Lighter autosuggest color.
 ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=blue"
-
-# This speeds up pasting w/ autosuggest
-# https://github.com/zsh-users/zsh-autosuggestions/issues/238
-pasteinit() {
-  OLD_SELF_INSERT=${${(s.:.)widgets[self-insert]}[2,3]}
-  zle -N self-insert url-quote-magic # I wonder if you'd need `.url-quote-magic`?
-}
-
-pastefinish() {
-  zle -N self-insert $OLD_SELF_INSERT
-}
-zstyle :bracketed-paste-magic paste-init pasteinit
-zstyle :bracketed-paste-magic paste-finish pastefinish
 
 # The next line updates PATH for the Google Cloud SDK.
 if [ -f '/Users/leo/Downloads/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/leo/Downloads/google-cloud-sdk/path.zsh.inc'; fi
