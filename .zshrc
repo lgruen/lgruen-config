@@ -127,17 +127,8 @@ compinit
 # Turn off all beeps
 unsetopt BEEP
 
-# Use Docker BuildKit by default.
-export DOCKER_BUILDKIT=1
-
 # Lighter autosuggest color.
 ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=blue"
-
-# The next line updates PATH for the Google Cloud SDK.
-if [ -f '/Users/leo/Downloads/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/leo/Downloads/google-cloud-sdk/path.zsh.inc'; fi
-
-# The next line enables shell command completion for gcloud.
-if [ -f '/Users/leo/Downloads/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/leo/Downloads/google-cloud-sdk/completion.zsh.inc'; fi
 
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!
