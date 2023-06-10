@@ -13,7 +13,8 @@
 ## Viscosity kill switch
 
 ```sh
-sudo cp disablenetwork.py /Library/Application\ Support/ViscosityScripts/disablenetwork.py
+sudo mkdir /Library/Application\ Support/ViscosityScripts
+sudo cp disablenetwork.py /Library/Application\ Support/ViscosityScripts/
 ```
 
 Add the following line under *Advanced* for the *Extra OpenVPN configuration cmmands*:
@@ -22,3 +23,8 @@ Add the following line under *Advanced* for the *Extra OpenVPN configuration cmm
 route-pre-down "/Library/Application\\ Support/ViscosityScripts/disablenetwork.py"
 ```
 
+Run the following once before connecting:
+
+```sh
+/Applications/Viscosity.app/Contents/MacOS/Viscosity -setSecureGlobalSetting YES -setting AllowOpenVPNScripts -value YES
+```
