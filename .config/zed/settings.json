@@ -60,6 +60,9 @@
           }
         }
       ]
+    },
+    "Groovy": {
+      "tab_size": 4
     }
   },
   "file_types": {
