@@ -7,45 +7,58 @@
 // custom settings, run `zed: open default settings` from the
 // command palette (cmd-shift-p / ctrl-shift-p)
 {
-  "features": {
-    // "zed" would be using Zeta instead.
-    "edit_prediction_provider": "copilot"
-  },
-  "show_copilot_suggestions": true,
-  // Can trigger language server code completions manually using Ctrl-Space.
-  "show_completions_on_input": false,
-  "telemetry": {
-    "metrics": false,
-    "diagnostics": false
-  },
-  "vim_mode": true,
-  "ui_font_size": 11.5,
-  "buffer_font_size": 11.5,
-  "theme": {
-    "mode": "system",
-    "light": "VSCode Light+",
-    "dark": "One Dark"
-  },
-  "cursor_blink": false,
-  "autosave": "on_focus_change",
-  "format_on_save": "off",
-  "tab_size": 2,
-  "preferred_line_length": 80,
-  //"buffer_font_family": "Monaco",
-  //"buffer_font_fallbacks": ["Hack Nerd Font Mono"],
-  "buffer_font_family": "Hack Nerd Font",
-  "terminal": {
-    "line_height": "standard",
-    "copy_on_select": true
-  },
-  // Don't auto-close / match parens.
-  "use_autoclose": true,
-  // Causes too many diffs.
-  "remove_trailing_whitespace_on_save": false,
-  // Format Python files using `ruff`.
-  "languages": {
-    "Python": {
-      "language_servers": ["ruff"]
+    "features": {
+        // "zed" would be using Zeta instead.
+        "edit_prediction_provider": "copilot"
+    },
+    "show_copilot_suggestions": true,
+    // Can trigger language server code completions manually using Ctrl-Space.
+    "show_completions_on_input": false,
+    "telemetry": {
+        "metrics": false,
+        "diagnostics": false
+    },
+    "vim_mode": true,
+    "ui_font_size": 11.5,
+    "buffer_font_size": 11.5,
+    "theme": {
+        "mode": "system",
+        "light": "VSCode Light+",
+        "dark": "One Dark"
+    },
+    "cursor_blink": false,
+    "autosave": "on_focus_change",
+    "format_on_save": "off",
+    "tab_size": 4,
+    "preferred_line_length": 80,
+    //"buffer_font_family": "Monaco",
+    //"buffer_font_fallbacks": ["Hack Nerd Font Mono"],
+    "buffer_font_family": "Hack Nerd Font",
+    "terminal": {
+        "line_height": "standard",
+        "copy_on_select": true
+    },
+    // Don't auto-close / match parens.
+    "use_autoclose": true,
+    // Causes too many diffs.
+    "remove_trailing_whitespace_on_save": false,
+    "languages": {
+        "Python": {
+            // `pyright` provides symbol information, `ruff` is used for formatting.
+            "language_servers": ["pyright", "ruff"],
+            "formatter": [
+                {
+                    "code_actions": {
+                        "source.organizeImports.ruff": true,
+                        "source.fixAll.ruff": true
+                    }
+                },
+                {
+                    "language_server": {
+                        "name": "ruff"
+                    }
+                }
+            ]
+        }
     }
-  }
 }
