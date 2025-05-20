@@ -39,7 +39,7 @@
     "copy_on_select": true
   },
   // Don't auto-close / match parens.
-  "use_autoclose": true,
+  "use_autoclose": false,
   // Causes too many diffs.
   "remove_trailing_whitespace_on_save": false,
   "languages": {
