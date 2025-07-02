@@ -108,14 +108,6 @@ require('lazy').setup({
     end,
   },
 
-  -- Detect tabstop and shiftwidth automatically
-  {
-    'NMAC427/guess-indent.nvim',
-    config = function()
-        require('guess-indent').setup()
-    end,
-  },
-
   {
     'WhoIsSethDaniel/mason-tool-installer.nvim',
     dependencies = { 'williamboman/mason.nvim' },
@@ -130,6 +122,27 @@ require('lazy').setup({
         run_on_start = true,
       })
     end,
+  },
+
+  -- Detect tabstop and shiftwidth automatically
+  {
+    'NMAC427/guess-indent.nvim',
+    opts = {},
+  },
+
+  -- git signs in gutter
+  {
+    'lewis6991/gitsigns.nvim',
+    opts = {
+      signs = {
+        add = { text = '+' },
+        change = { text = '~' },
+        delete = { text = '_' },
+        topdelete = { text = '‾' },
+        changedelete = { text = '~' },
+      },
+      current_line_blame = true,
+    },
   },
 
   -- LSP Support
@@ -262,9 +275,11 @@ require('lazy').setup({
       telescope.setup({
         defaults = {
           layout_strategy = 'horizontal',
+          sorting_strategy = 'ascending',
           layout_config = {
             horizontal = {
               preview_width = 0.55,
+              prompt_position = 'top',
             },
           },
           mappings = {
@@ -272,6 +287,11 @@ require('lazy').setup({
               -- Disable Ctrl-u/d from clearing prompt in insert mode
               ['<C-u>'] = false,
               ['<C-d>'] = false,
+              -- Add Ctrl-j/k navigation in insert mode
+              ['<C-j>'] = 'move_selection_next',
+              ['<C-k>'] = 'move_selection_previous',
+              -- Single Esc to close
+              ['<esc>'] = 'close',
             },
           },
         },
@@ -282,11 +302,16 @@ require('lazy').setup({
       -- Keymaps
       vim.keymap.set('n', '<leader>f', builtin.find_files, { desc = 'Find files' })
       vim.keymap.set('n', '<leader>g', builtin.live_grep, { desc = 'Live grep' })
-      vim.keymap.set('n', '<leader>b', builtin.buffers, { desc = 'Buffers' })
       vim.keymap.set('n', '<leader>h', builtin.help_tags, { desc = 'Help' })
       vim.keymap.set('n', '<leader>/', builtin.current_buffer_fuzzy_find, { desc = 'Search in buffer' })
-      vim.keymap.set('n', '<leader><leader>', builtin.buffers, { desc = 'Quick buffer switch' })
       vim.keymap.set('n', '<leader>d', builtin.diagnostics, { desc = 'Diagnostics' })
+      -- MRU buffers, similar to bufexplorer
+      vim.keymap.set('n', '<leader>b', function()
+        builtin.buffers({
+          sort_mru = true,
+          initial_mode = 'normal', -- Start in normal mode, for j/k navigation
+        })
+      end, { desc = 'Buffers (MRU)' })
     end,
   },
 
