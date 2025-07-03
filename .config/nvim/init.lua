@@ -27,9 +27,20 @@ vim.o.background = 'light'
 -- Also yank to system clipboard
 vim.opt.clipboard:append("unnamedplus")
 
--- Disable text wrapping
-vim.o.textwidth = 0
-vim.o.wrapmargin = 0
+-- Use OSC 52 when connected via SSH to copy to system clipboard
+if vim.env.SSH_CLIENT then
+  vim.g.clipboard = {
+    name = 'OSC 52',
+    copy = {
+      ['+'] = require('vim.ui.clipboard.osc52').copy('+'),
+      ['*'] = require('vim.ui.clipboard.osc52').copy('*'),
+    },
+    paste = {
+      ['+'] = require('vim.ui.clipboard.osc52').paste('+'),
+      ['*'] = require('vim.ui.clipboard.osc52').paste('*'),
+    },
+  }
+end
 
 -- Key mappings
 vim.keymap.set('n', '<C-f>', function()
