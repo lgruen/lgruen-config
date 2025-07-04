@@ -313,6 +313,7 @@ require('lazy').setup({
       -- Keymaps
       vim.keymap.set('n', '<leader>f', builtin.find_files, { desc = 'Find files' })
       vim.keymap.set('n', '<leader>g', builtin.live_grep, { desc = 'Live grep' })
+      vim.keymap.set('n', '<leader>r', builtin.resume, { desc = 'Resume last search' })
       vim.keymap.set('n', '<leader>h', builtin.help_tags, { desc = 'Help' })
       vim.keymap.set('n', '<leader>/', builtin.current_buffer_fuzzy_find, { desc = 'Search in buffer' })
       vim.keymap.set('n', '<leader>d', builtin.diagnostics, { desc = 'Diagnostics' })
