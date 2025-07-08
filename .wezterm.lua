@@ -9,7 +9,8 @@ config.harfbuzz_features = { 'calt=0', 'clig=0', 'liga=0' }
 
 config.scrollback_lines = 50000
 
-config.pane_focus_follows_mouse = true
+-- Doesn't work reliably: https://github.com/wezterm/wezterm/issues/4484
+-- config.pane_focus_follows_mouse = true
 
 config.audible_bell = "Disabled"
 config.visual_bell = {
@@ -80,6 +81,27 @@ config.keys = {
     mods = 'SHIFT',
     action = wezterm.action.SendString '\\\n'
   },
+}
+
+config.mouse_bindings = {
+    -- Disable the default click behavior
+    {
+      event = { Up = { streak = 1, button = "Left"} },
+      mods = "NONE",
+      action = wezterm.action.CompleteSelection 'ClipboardAndPrimarySelection',
+    },
+    -- Shift-click will open the link under the mouse cursor
+    {
+        event = { Up = { streak = 1, button = "Left" } },
+        mods = "SHIFT",
+        action = wezterm.action.OpenLinkAtMouseCursor,
+    },
+    -- Disable the Shift-click down event to stop programs from seeing it when a URL is clicked
+    {
+        event = { Down = { streak = 1, button = "Left" } },
+        mods = "SHIFT",
+        action = wezterm.action.Nop,
+    },
 }
 
 config.enable_tab_bar = false
