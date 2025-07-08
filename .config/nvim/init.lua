@@ -153,6 +153,77 @@ require('lazy').setup({
         changedelete = { text = '~' },
       },
       current_line_blame = true,
+      on_attach = function(bufnr)
+        local gs = package.loaded.gitsigns
+
+        local function map(mode, l, r, opts)
+          opts = opts or {}
+          opts.buffer = bufnr
+          vim.keymap.set(mode, l, r, opts)
+        end
+
+        -- Navigation
+        map('n', ']c', function()
+          if vim.wo.diff then return ']c' end
+          vim.schedule(function() gs.next_hunk() end)
+          return '<Ignore>'
+        end, {expr=true, desc='Next git change'})
+
+        map('n', '[c', function()
+          if vim.wo.diff then return '[c' end
+          vim.schedule(function() gs.prev_hunk() end)
+          return '<Ignore>'
+        end, {expr=true, desc='Previous git change'})
+
+        -- Actions
+        map('n', '<leader>hs', gs.stage_hunk, {desc='Stage hunk'})
+        map('n', '<leader>hr', gs.reset_hunk, {desc='Reset hunk'})
+        map('v', '<leader>hs', function() gs.stage_hunk {vim.fn.line('.'), vim.fn.line('v')} end, {desc='Stage hunk'})
+        map('v', '<leader>hr', function() gs.reset_hunk {vim.fn.line('.'), vim.fn.line('v')} end, {desc='Reset hunk'})
+        map('n', '<leader>hp', gs.preview_hunk, {desc='Preview hunk'})
+      end
+    },
+  },
+
+  -- Git diff viewer
+  {
+    'sindrets/diffview.nvim',
+    cmd = { 'DiffviewOpen', 'DiffviewFileHistory' },
+    keys = {
+        { '<leader>gd', function() vim.cmd('DiffviewOpen --staged') end, desc = 'Git diff staged' },
+        { '<leader>gD', vim.cmd.DiffviewOpen, desc = 'Git diff view unstaged' },
+        { '<leader>gh', function() vim.cmd('DiffviewFileHistory %') end, desc = 'File history' },
+        { '<leader>gH', vim.cmd.DiffviewFileHistory, desc = 'Branch history' },
+    },
+    opts = {
+      enhanced_diff_hl = true,
+      view = {
+        default = {
+          layout = "diff2_horizontal",
+          winbar_info = true,
+        },
+        file_history = {
+          layout = "diff2_horizontal",
+          winbar_info = true,
+        },
+      },
+      file_panel = {
+        listing_style = "tree",
+        win_config = {
+          position = "left",
+          width = 30,
+        },
+      },
+      key_bindings = {
+        file_panel = {
+          ['q'] = '<cmd>DiffviewClose<cr>',
+          ['<esc>'] = '<cmd>DiffviewClose<cr>',
+        },
+        view = {
+          ['q'] = '<cmd>DiffviewClose<cr>',
+          ['<esc>'] = '<cmd>DiffviewClose<cr>',
+        },
+      },
     },
   },
 
@@ -206,11 +277,12 @@ require('lazy').setup({
         callback = function(event)
           local opts = { buffer = event.buf }
           
-          vim.keymap.set('n', 'gd', require('telescope.builtin').lsp_definitions, opts)
-          vim.keymap.set('n', 'gr', require('telescope.builtin').lsp_references, opts)
           vim.keymap.set('n', 'K', vim.lsp.buf.hover, opts)
           vim.keymap.set('n', '<leader>rn', vim.lsp.buf.rename, opts)
           vim.keymap.set({ 'n', 'v' }, '<leader>ca', vim.lsp.buf.code_action, opts)
+          vim.keymap.set('n', 'gd', require('telescope.builtin').lsp_definitions, opts)
+          vim.keymap.set('n', 'gr', require('telescope.builtin').lsp_references, opts)
+
           vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float, opts)
 	  vim.keymap.set('n', '=', function()
             require('conform').format({ 
