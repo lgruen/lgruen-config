@@ -90,19 +90,23 @@ config.mouse_bindings = {
       mods = "NONE",
       action = wezterm.action.CompleteSelection 'ClipboardAndPrimarySelection',
     },
-    -- Shift-click will open the link under the mouse cursor
+    -- Cmd-click will open the link under the mouse cursor
+		-- Note that in nvim with "set mouse=a", need to also hold Shift to bypass
+		-- mouse reporting capture, i.e. Shift-Cmd+click.
     {
-        event = { Up = { streak = 1, button = "Left" } },
-        mods = "SHIFT",
-        action = wezterm.action.OpenLinkAtMouseCursor,
+      event = { Up = { streak = 1, button = "Left" } },
+      mods = "CMD",
+      action = wezterm.action.OpenLinkAtMouseCursor,
     },
-    -- Disable the Shift-click down event to stop programs from seeing it when a URL is clicked
+    -- Disable the Cmd-click down event to stop programs from seeing it when a URL is clicked
     {
-        event = { Down = { streak = 1, button = "Left" } },
-        mods = "SHIFT",
-        action = wezterm.action.Nop,
+      event = { Down = { streak = 1, button = "Left" } },
+      mods = "CMD",
+      action = wezterm.action.Nop,
     },
 }
+
+-- https://www.perplexity.ai/search/in-nvim-in-a-wezterm-terminal-GIcJGWS2RIexh6YudKWgzA
 
 config.enable_tab_bar = false
 
