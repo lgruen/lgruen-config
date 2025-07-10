@@ -47,9 +47,10 @@ end, { desc = 'Show full path' })
 vim.keymap.set('n', ',', vim.cmd.nohlsearch, { desc = 'Clear search highlights' })
 
 vim.keymap.set('n', 'yp', function()
-  vim.fn.setreg('+', vim.fn.expand('%'))
-  vim.notify('Copied: ' .. vim.fn.expand('%'))
-end, { desc = 'Yank path to clipboard' })
+  local path = vim.fn.fnamemodify(vim.fn.expand('%'), ':.')
+  vim.fn.setreg('+', path)
+  vim.notify('Copied: ' .. path)
+end, { desc = 'Yank relative path to clipboard' })
 
 -- Install lazy.nvim
 local lazypath = vim.fn.stdpath('data') .. '/lazy/lazy.nvim'
