@@ -1,9 +1,3 @@
--- Mason auto-installs: pyright, ruff, prettier
--- Free AI completion: Codeium (Tab to accept, Option+] for next suggestion)
--- Optional: Install Rust (cargo) for faster completion fuzzy matching
--- Commands: :Mason, :ConformInfo, :LspInfo, :Codeium Auth, :CodeiumToggle, :Codeium Chat
--- Quick keys: <leader>f (files), <leader>g (grep), <leader>b (buffers), = (format), gw (jump)
-
 -- Leader key
 vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
@@ -190,10 +184,10 @@ require('lazy').setup({
     'sindrets/diffview.nvim',
     cmd = { 'DiffviewOpen', 'DiffviewFileHistory' },
     keys = {
-        { '<leader>gd', function() vim.cmd('DiffviewOpen --staged') end, desc = 'Git diff staged' },
-        { '<leader>gD', vim.cmd.DiffviewOpen, desc = 'Git diff view unstaged' },
-        { '<leader>gh', function() vim.cmd('DiffviewFileHistory %') end, desc = 'File history' },
-        { '<leader>gH', vim.cmd.DiffviewFileHistory, desc = 'Branch history' },
+        { '<leader>dv', vim.cmd.DiffviewOpen, desc = 'Git diff view unstaged' },
+        { '<leader>ds', function() vim.cmd('DiffviewOpen --staged') end, desc = 'Git diff staged' },
+        { '<leader>df', function() vim.cmd('DiffviewFileHistory %') end, desc = 'File history' },
+        { '<leader>dh', vim.cmd.DiffviewFileHistory, desc = 'Branch history' },
     },
     opts = {
       enhanced_diff_hl = true,
@@ -241,25 +235,6 @@ require('lazy').setup({
       -- Setup mason-lspconfig
       require('mason-lspconfig').setup()
 
-      local lspconfig = require('lspconfig')
-      
-      -- Manual setup for each server (more explicit and reliable)
-      lspconfig.pyright.setup({
-        settings = {
-          python = {
-            analysis = {
-              typeCheckingMode = "off",  -- Let Ruff handle this
-            },
-          },
-        },
-      })
-      
-      lspconfig.ruff.setup({})  -- New ruff server
-
-      -- Add more language servers here:
-      -- lspconfig.ts_ls.setup({})
-      -- lspconfig.jdtls.setup({})
-
       -- Diagnostic display
       vim.diagnostic.config({
         virtual_text = {
@@ -282,9 +257,8 @@ require('lazy').setup({
           vim.keymap.set({ 'n', 'v' }, '<leader>ca', vim.lsp.buf.code_action, opts)
           vim.keymap.set('n', 'gd', require('telescope.builtin').lsp_definitions, opts)
           vim.keymap.set('n', 'gr', require('telescope.builtin').lsp_references, opts)
-
           vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float, opts)
-	  vim.keymap.set('n', '=', function()
+          vim.keymap.set('n', '=', function()
             require('conform').format({ 
               async = true, 
               lsp_fallback = true,
@@ -303,7 +277,6 @@ require('lazy').setup({
   -- Minimal autocompletion
   {
     'saghen/blink.cmp',
-    version = '1.*',
     event = 'InsertEnter',
     build = 'cargo build --release',  -- Requires Rust (cargo) installed
     dependencies = {
@@ -315,7 +288,6 @@ require('lazy').setup({
       sources = {
         default = { 'lsp', 'path' },
       },
-      -- Will automatically use Rust implementation if build succeeds
     },
   },
 
@@ -346,7 +318,6 @@ require('lazy').setup({
   -- Telescope fuzzy finder
   {
     'nvim-telescope/telescope.nvim',
-    branch = '0.1.x',
     dependencies = {
       'nvim-lua/plenary.nvim',
       { 'nvim-telescope/telescope-fzf-native.nvim', build = 'make' },
@@ -385,10 +356,11 @@ require('lazy').setup({
       -- Keymaps
       vim.keymap.set('n', '<leader>f', builtin.find_files, { desc = 'Find files' })
       vim.keymap.set('n', '<leader>g', builtin.live_grep, { desc = 'Live grep' })
+      vim.keymap.set('n', '<leader>G', builtin.grep_string, { desc = 'Grep word under cursor' })
       vim.keymap.set('n', '<leader>r', builtin.resume, { desc = 'Resume last search' })
       vim.keymap.set('n', '<leader>h', builtin.help_tags, { desc = 'Help' })
       vim.keymap.set('n', '<leader>/', builtin.current_buffer_fuzzy_find, { desc = 'Search in buffer' })
-      vim.keymap.set('n', '<leader>d', builtin.diagnostics, { desc = 'Diagnostics' })
+      vim.keymap.set('n', '<leader>E', builtin.diagnostics, { desc = 'Diagnostics' })
       -- MRU buffers, similar to bufexplorer
       vim.keymap.set('n', '<leader>b', function()
         builtin.buffers({
