@@ -254,10 +254,11 @@ require('lazy').setup({
           local opts = { buffer = event.buf }
           
           vim.keymap.set('n', 'K', vim.lsp.buf.hover, opts)
-          vim.keymap.set('n', '<leader>rn', vim.lsp.buf.rename, opts)
+          vim.keymap.set('n', '<leader>cr', vim.lsp.buf.rename, opts)
           vim.keymap.set({ 'n', 'v' }, '<leader>ca', vim.lsp.buf.code_action, opts)
           vim.keymap.set('n', 'gd', require('telescope.builtin').lsp_definitions, opts)
           vim.keymap.set('n', 'gr', require('telescope.builtin').lsp_references, opts)
+          vim.keymap.set('n', '<leader>s', require('telescope.builtin').lsp_dynamic_workspace_symbols, opts)
           vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float, opts)
           vim.keymap.set('n', '=', function()
             require('conform').format({ 
@@ -308,11 +309,6 @@ require('lazy').setup({
       -- Escape will clear suggestions if visible, then exit insert mode as normal
       vim.keymap.set('i', '<Esc>', '<Cmd>call codeium#Clear()<CR><Esc>', { desc = 'Clear suggestion and exit' })
       -- Note: Codeium doesn't support partial accept (word/line) like Copilot
-      
-      -- Toggle Codeium on/off
-      vim.keymap.set('n', '<leader>ct', vim.cmd.CodeiumToggle, { desc = 'Toggle Codeium' })
-      -- Chat functionality (opens in browser)
-      vim.keymap.set('n', '<leader>cc', function() vim.cmd('Codeium Chat') end, { desc = 'Open Codeium Chat' })
     end,
   },
 
@@ -359,8 +355,8 @@ require('lazy').setup({
       vim.keymap.set('n', '<leader>g', builtin.live_grep, { desc = 'Live grep' })
       vim.keymap.set('n', '<leader>G', builtin.grep_string, { desc = 'Grep word under cursor' })
       vim.keymap.set('n', '<leader>r', builtin.resume, { desc = 'Resume last search' })
-      vim.keymap.set('n', '<leader>h', builtin.help_tags, { desc = 'Help' })
       vim.keymap.set('n', '<leader>/', builtin.current_buffer_fuzzy_find, { desc = 'Search in buffer' })
+      vim.keymap.set('n', '<leader>t', builtin.treesitter, { desc = 'Search treesitter symbols' })
       vim.keymap.set('n', '<leader>E', builtin.diagnostics, { desc = 'Diagnostics' })
       -- MRU buffers, similar to bufexplorer
       vim.keymap.set('n', '<leader>b', function()
