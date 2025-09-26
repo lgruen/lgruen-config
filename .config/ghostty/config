@@ -1,0 +1,29 @@
+theme = "One Double Light"
+
+font-family = JetBrains Mono
+font-size = 12
+font-feature = -calt,-liga,-dlig
+adjust-cell-width = -5%
+
+cursor-style-blink = false
+shell-integration-features = no-cursor
+
+focus-follows-mouse = true
+fullscreen = true
+scrollback-limit = 50000000
+
+bell-features = no-system,no-audio,attention
+
+# Split pane creation
+keybind = super+shift+s=new_split:down
+keybind = super+shift+v=new_split:right
+
+# Split pane navigation with Cmd+Shift+HJKL
+keybind = super+shift+h=goto_split:left
+keybind = super+shift+l=goto_split:right
+keybind = super+shift+k=goto_split:up
+keybind = super+shift+j=goto_split:down
+
+# Claude Code newline support (Shift+Enter sends backslash newline)
+# This is useful for multiline commands in shells
+keybind = shift+enter=text:\\\n

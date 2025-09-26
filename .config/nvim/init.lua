@@ -285,7 +285,7 @@ require('lazy').setup({
       'L3MON4D3/LuaSnip',
     },
     opts = {
-      keymap = { preset = 'default' },
+      keymap = { preset = 'enter' },
       appearance = { nerd_font_variant = 'mono' },
       sources = {
         default = { 'lsp', 'path' },
@@ -293,23 +293,10 @@ require('lazy').setup({
     },
   },
 
-  -- Codeium (free AI code completion)
+  -- Codeium / Windsurf (free AI code completion)
   {
-    'Exafunction/codeium.vim',
+    'Exafunction/windsurf.vim',
     event = 'BufEnter',
-    config = function()
-      -- Disable default bindings to set our own
-      vim.g.codeium_disable_bindings = 1
-      
-      -- Keybindings similar to Copilot
-      vim.keymap.set('i', '<Tab>', function() return vim.fn['codeium#Accept']() end, { expr = true, desc = 'Accept suggestion' })
-      vim.keymap.set('i', '<M-]>', function() return vim.fn['codeium#CycleCompletions'](1) end, { expr = true, desc = 'Next suggestion' })
-      vim.keymap.set('i', '<M-[>', function() return vim.fn['codeium#CycleCompletions'](-1) end, { expr = true, desc = 'Previous suggestion' })
-      vim.keymap.set('i', '<M-\\>', function() return vim.fn['codeium#Complete']() end, { expr = true, desc = 'Trigger suggestion' })
-      -- Escape will clear suggestions if visible, then exit insert mode as normal
-      vim.keymap.set('i', '<Esc>', '<Cmd>call codeium#Clear()<CR><Esc>', { desc = 'Clear suggestion and exit' })
-      -- Note: Codeium doesn't support partial accept (word/line) like Copilot
-    end,
   },
 
   -- Telescope fuzzy finder
@@ -317,12 +304,16 @@ require('lazy').setup({
     'nvim-telescope/telescope.nvim',
     dependencies = {
       'nvim-lua/plenary.nvim',
+      'nvim-telescope/telescope-live-grep-args.nvim',
+      'nvim-tree/nvim-web-devicons',
       { 'nvim-telescope/telescope-fzf-native.nvim', build = 'make' },
     },
     config = function()
       local telescope = require('telescope')
       local builtin = require('telescope.builtin')
-      
+      local lga_actions = require("telescope-live-grep-args.actions")
+      local live_grep_args_shortcuts = require("telescope-live-grep-args.shortcuts")
+
       telescope.setup({
         defaults = {
           layout_strategy = 'horizontal',
@@ -346,14 +337,28 @@ require('lazy').setup({
             },
           },
         },
+        extensions = {
+          live_grep_args = {
+            auto_quoting = true,
+            mappings = {
+              i = {
+                ["<C-k>"] = lga_actions.quote_prompt(),
+                ["<C-i>"] = lga_actions.quote_prompt({ postfix = " --iglob " }),
+                -- freeze the current list and start a fuzzy search in the frozen list
+                ["<C-space>"] = lga_actions.to_fuzzy_refine,
+              },
+            },
+          },
+        },
       })
       
+      telescope.load_extension('live_grep_args')
       telescope.load_extension('fzf')
       
       -- Keymaps
       vim.keymap.set('n', '<leader>f', builtin.find_files, { desc = 'Find files' })
-      vim.keymap.set('n', '<leader>g', builtin.live_grep, { desc = 'Live grep' })
-      vim.keymap.set('n', '<leader>G', builtin.grep_string, { desc = 'Grep word under cursor' })
+      vim.keymap.set('n', '<leader>g', telescope.extensions.live_grep_args.live_grep_args, { desc = 'Live grep' })
+      vim.keymap.set('n', '<leader>G', live_grep_args_shortcuts.grep_word_under_cursor, { desc = 'Grep word under cursor' })
       vim.keymap.set('n', '<leader>r', builtin.resume, { desc = 'Resume last search' })
       vim.keymap.set('n', '<leader>/', builtin.current_buffer_fuzzy_find, { desc = 'Search in buffer' })
       vim.keymap.set('n', '<leader>t', builtin.treesitter, { desc = 'Search treesitter symbols' })
